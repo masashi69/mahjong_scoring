@@ -40,8 +40,12 @@ def CalculateScore(scorefile):
 
 def main():
     mj_df = pd.read_csv(FileName)
+    tonpu_df = mj_df[mj_df['gameid'].str.contains('T')]
 
+    print('---総合スコア ---')
     CalculateScore(mj_df)
+    print('--- 東風戦スコア ---')
+    CalculateScore(tonpu_df)
 
 if __name__ == '__main__':
     main()
