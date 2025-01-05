@@ -1,8 +1,6 @@
 import pandas as pd
 import sys
 
-FileName = sys.argv[1]
-
 def CalcDeviationRank(rank):
     # To calcurate deviation of rank
     return abs(4 - rank)
@@ -39,16 +37,41 @@ def CalculateScore(scorefile):
 
 
 def main():
+    ScoreFlag = None
+
+    if len(sys.argv) <= 1:
+        print('Usage: python summary.py <filename> <option>')
+        sys.exit(1)
+    elif len(sys.argv) == 2:
+        pass
+    elif len(sys.argv) == 3:
+        if sys.argv[2] == '--hansou' or sys.argv[2] == '--tonpu':
+            ScoreFlag = sys.argv[2]
+        else:
+            print('Usage: option is --hansou or --tanou')
+    else:
+        print('Usage: option is --hansou or --tanou')
+        sys.exit(1)
+
+    FileName = sys.argv[1]
+
     mj_df = pd.read_csv(FileName)
     hansou_df = mj_df[mj_df['gameid'].str.contains('H')]
     tonpu_df = mj_df[mj_df['gameid'].str.contains('T')]
 
-    print('---  総合スコア  ---')
-    CalculateScore(mj_df)
-    print('---  半荘戦スコア  ---')
-    CalculateScore(hansou_df)
-    print('---  東風戦スコア  ---')
-    CalculateScore(tonpu_df)
+    if len(sys.argv) == 2:
+        print('=====  総合スコア  =====')
+        CalculateScore(mj_df)
+        print('=====  半荘戦スコア  =====')
+        CalculateScore(hansou_df)
+        print('=====  東風戦スコア  =====')
+        CalculateScore(tonpu_df)
+    elif ScoreFlag is not None and ScoreFlag == '--hansou':
+        print('=====  半荘戦スコア  =====')
+        CalculateScore(hansou_df)
+    elif ScoreFlag is not None and ScoreFlag == '--tonpu':
+        print('=====  東風戦スコア  =====')
+        CalculateScore(tonpu_df)
 
 if __name__ == '__main__':
     main()
